@@ -26,7 +26,7 @@ function init(){
 	// Cameras
 
 	camera = new THREE.PerspectiveCamera( 45, window.innerWidth/ window.innerHeight, 1, 10000 );
-	camera.position.set( 0,50,200 );
+	camera.position.set( 0,100,200 );
 	camera.lookAt( scene.position );
 	scene.add( camera );
 
@@ -40,9 +40,7 @@ function init(){
 	// Geometries
 	cube_group = new THREE.Object3D();
 
-	cube_inner = create_outer_cube( 99 );
-	cube_outer = create_outer_cube(101);
-
+	
     // Inner cubes
 
 	for (var i = -1 ; i < 2; i++)
@@ -56,6 +54,8 @@ function init(){
 
 
     // Outer cubes
+	cube_inner = create_outer_cube(99);
+	cube_outer = create_outer_cube(101);
 
 	cube_group.add( cube_inner );
 	cube_group.add( cube_outer );
@@ -64,20 +64,54 @@ function init(){
 	// Renderer
 
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
-	renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.setSize( window.innerWidth -100 , window.innerHeight -100 );
 	renderer.setClearColor( 0x404040 );
 	renderer.sortObjects = false;
 
-	div.appendChild( renderer.domElement );
+	div.appendChild(renderer.domElement);
+
+    // Axis
+
+	var axisHelper = new THREE.AxisHelper(5);
+	scene.add(axisHelper);
 }
+
+var X_axis = new THREE.Vector3( 1, 0, 0);
+var Y_axis = new THREE.Vector3( 0, 1, 0);
+var Z_axis = new THREE.Vector3( 0, 0, 1);
 
 function animate()
 {
 	requestAnimationFrame( animate );
 
-	//cube_group.rotation.x += 0.01;
-	//cube_group.rotation.y += 0.01;
+	if (rotation_animation.is_animating() )
+	{
+	    if (rotation_animation.rotate_x) {
+	        //cube_group.rotateX(rotation_animation.rotation_direction * rotation_animation.get_offset());
+	        rotateAroundWorldAxis(cube_group, X_axis, rotation_animation.rotation_direction * rotation_animation.get_offset());
 
+	        if (--rotation_animation.animation_residue == 0) {
+	            rotation_animation.rotate_x = false;
+	        }
+	    }
+	    else if (rotation_animation.rotate_y) {
+	        //cube_group.rotateY(rotation_animation.rotation_direction * rotation_animation.get_offset());
+	        rotateAroundWorldAxis(cube_group, Y_axis, rotation_animation.rotation_direction * rotation_animation.get_offset());
+
+	        if (--rotation_animation.animation_residue == 0) {
+	            rotation_animation.rotate_y = false;
+	        }
+	    }
+	    else if (rotation_animation.rotate_z) {
+	        //cube_group.rotateZ(rotation_animation.rotation_direction * rotation_animation.get_offset());
+	        rotateAroundWorldAxis(cube_group, Z_axis, rotation_animation.rotation_direction * rotation_animation.get_offset());
+
+	        if (--rotation_animation.animation_residue == 0) {
+	            rotation_animation.rotate_z = false;
+	        }
+	    }
+	}
+	
 	renderer.render( scene, camera );
 }
 
