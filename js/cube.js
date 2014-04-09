@@ -5,7 +5,7 @@ function create_outer_cube(cube_dim) {
 }
 
 function create_inner_cube(cube_dim) {
-    var offset = 10;
+    var offset = 10;    
 
     cube_dim -= offset;
     cube_geo = new THREE.CubeGeometry(cube_dim, cube_dim, cube_dim);
