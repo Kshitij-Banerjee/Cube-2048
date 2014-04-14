@@ -38,9 +38,15 @@ function create_random_indice()
 	x = Math.floor(Math.random()* 10) % 3;    
     return x ;	
 }
+var active_cubes = 0;
 
 function create_random_cube()
 {
+	if( active_cubes == 27){
+		alert( "GameOver!");
+		return;
+	}
+	
 	var x, y, z;
 	do
 	{
@@ -53,6 +59,7 @@ function create_random_cube()
 	CUBE2048.game_array[x][y][z] = 1;
 	
     var cube = create_inner_cube(33);
+    active_cubes ++;
 
 	x--;
 	y--;
